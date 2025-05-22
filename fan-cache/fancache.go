@@ -1,4 +1,4 @@
-package fantastic_cache
+package fan_cache
 
 import (
 	"fmt"

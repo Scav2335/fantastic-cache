@@ -1,4 +1,4 @@
-package fantastic_cache
+package fan_cache
 
 type ByteView struct {
 	b []byte

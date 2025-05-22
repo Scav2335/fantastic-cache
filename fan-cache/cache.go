@@ -1,13 +1,13 @@
-package fantastic_cache
+package fan_cache
 
 import (
-	"scav.abc/fantastic-cache/strategies"
+	strategies2 "scav.abc/fantastic-cache/fan-cache/strategies"
 	"sync"
 )
 
 type cache struct {
 	mu         sync.RWMutex
-	lru        strategies.Cache
+	lru        strategies2.Cache
 	cacheBytes int
 }
 
@@ -17,7 +17,7 @@ func (c *cache) add(k string, v ByteView) {
 
 	// Lazy Initialization
 	if c.lru == nil {
-		c.lru = strategies.NewLruCache(c.cacheBytes, nil)
+		c.lru = strategies2.NewLruCache(c.cacheBytes, nil)
 	}
 	c.lru.Set(k, v)
 }
