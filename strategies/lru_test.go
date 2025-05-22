@@ -1,4 +1,4 @@
-package cache
+package strategies
 
 import (
 	"reflect"
@@ -12,20 +12,20 @@ func (s String) Len() int {
 }
 
 func TestLruCache_Get(t *testing.T) {
-	lru := New(0, nil)
+	lru := NewLruCache(0, nil)
 	lru.Set("key1", String("1234"))
 	if v, ok := lru.Get("key1"); !ok || v.(String) != "1234" {
 		t.Fatalf("ache hit key1=1234 failed")
 	}
 	if _, ok := lru.Get("key2"); ok {
-		t.Fatalf("cache miss key2 failed")
+		t.Fatalf("strategies miss key2 failed")
 	}
 }
 
 func TestLruCache_RemoveOldest(t *testing.T) {
 	k1, k2, k3 := "key1", "key2", "k3"
 	v1, v2, v3 := "value1", "value2", "v3"
-	lru := New(len(k1+k2+v1+v2), nil)
+	lru := NewLruCache(len(k1+k2+v1+v2), nil)
 	lru.Set(k1, String(v1))
 	lru.Set(k2, String(v2))
 	lru.Set(k3, String(v3))
@@ -40,7 +40,7 @@ func TestOnEvicted(t *testing.T) {
 	callback := func(key string, value Value) {
 		keys = append(keys, key)
 	}
-	lru := New(10, callback)
+	lru := NewLruCache(10, callback)
 	lru.Set("key1", String("123456"))
 	lru.Set("k2", String("k2"))
 	lru.Set("k3", String("k3"))

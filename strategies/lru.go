@@ -1,4 +1,4 @@
-package cache
+package strategies
 
 import "container/list"
 
@@ -10,7 +10,7 @@ type LruCache struct {
 	OnEvicted func(key string, value Value)
 }
 
-func New(maxBytes int, onEvicted func(string, Value)) *LruCache {
+func NewLruCache(maxBytes int, onEvicted func(string, Value)) *LruCache {
 	return &LruCache{
 		maxBytes:  maxBytes,
 		ll:        list.New(),
@@ -33,7 +33,7 @@ func (l *LruCache) Set(key string, value Value) {
 		l.nBytes += len(key) + value.Len()
 	}
 	for l.maxBytes > 0 && l.maxBytes < l.nBytes {
-		l.RemoveOldest()
+		l.removeOldest()
 	}
 }
 
@@ -46,13 +46,13 @@ func (l *LruCache) Get(key string) (val Value, ok bool) {
 	return
 }
 
-// Len the number of cache entries
+// Len the number of strategies entries
 func (l *LruCache) Len() int {
 	return l.ll.Len()
 }
 
-// RemoveOldest removes the oldest item
-func (l *LruCache) RemoveOldest() {
+// removeOldest removes the oldest item
+func (l *LruCache) removeOldest() {
 	ele := l.ll.Front()
 	if ele != nil {
 		l.ll.Remove(ele)
